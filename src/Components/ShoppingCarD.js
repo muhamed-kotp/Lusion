@@ -14,6 +14,10 @@ import Navbar from "react-bootstrap/Navbar";
 const ShoppingCarD = (props) => {
   const sale = props.data;
 
+  useEffect(()=>{
+    props.totalFunc()
+
+  },[])
 
   if (sale.length === 0) {
     return (
