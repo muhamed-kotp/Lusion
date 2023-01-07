@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Shop from "./Components/Shop";
 import Home from "./Components/Home";
 import Navs from "./Components/Navs";
@@ -17,6 +17,7 @@ import shopC8 from "./Photos/shopC8.jpg";
 // 'Quilted Gilet With Hood', 'Shirt' , 'Jeans', 'Hood', 'Clothing',' Bag Brand', 'Accessories', 'Shoes'
 
 const App = () => {
+  const [total, settotal] = useState([]);
   const [Products] = useState([
     {
       id: 1,
@@ -36,6 +37,14 @@ const App = () => {
     { id: 9, name: "Clothing", price: 350, count: 9, img: shopC1, pusrches: 1 },
   ]);
   const [data, setdata] = useState([]);
+  useEffect(() => {
+    totalFunc();
+  }, [total]);
+  const totalFunc = () => {
+    const sum = data.reduce((accumulator, data) => {
+      return accumulator + data.price * data.pusrches;
+    }, 0);  settotal(sum);
+  };
 
   const buy = (obj) => {
     // console.log(obj.id);
@@ -55,6 +64,7 @@ const App = () => {
       return e;
     });
     setdata(hanledata);
+    totalFunc();
   };
   const dec = (obj) => {
     let hanledata = [...data];
@@ -68,6 +78,7 @@ const App = () => {
       return e;
     });
     setdata(hanledata);
+    totalFunc();
   };
   const remove = (obj) => {
     setdata((e) => e.filter((data) => data.id !== obj.id));
@@ -85,7 +96,7 @@ const App = () => {
         <Route
           path="/ShoppingCarD"
           element={
-            <ShoppingCarD data={data} remove={remove} add={add} dec={dec} />
+            <ShoppingCarD data={data} remove={remove} add={add} dec={dec} total={total} totalFunc={totalFunc} />
           }
         />
         <Route path="/Shop/ShoppingCarD.js" element={<ShoppingCarD />} />

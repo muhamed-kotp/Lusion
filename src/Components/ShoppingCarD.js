@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 import Badge from "react-bootstrap/Badge";
 import "../Style/ShoppingCarD.css";
@@ -8,19 +8,12 @@ import Card from "react-bootstrap/Card";
 import { BiPlusMedical } from "react-icons/bi";
 import { FaMinus } from "react-icons/fa";
 import { ImBoxRemove } from "react-icons/im";
+import Navbar from "react-bootstrap/Navbar";
+
 
 const ShoppingCarD = (props) => {
   const sale = props.data;
 
-  const [total, settotal] = useState([]);
-
-  const totalFunc = () => {
-    const sum = sale.reduce((accumulator, sale) => {
-      return accumulator + sale.price * sale.pusrches;
-    }, 0);
-
-    settotal(sum);
-  };
 
   if (sale.length === 0) {
     return (
@@ -32,85 +25,12 @@ const ShoppingCarD = (props) => {
           </div>
         </Container>
 
-        {/* <Container className="w-100 first-container">
-          <Badge bg='light' className="total-price-badge">
-            <Button className="total-price-btn"> Get Total Price </Button>
-            <h1>Total Price : 0</h1>
-          </Badge>
-        </Container> */}
-
-        <div className=" Continuo-container container">
-          <Button variant="outline-success" className="Continuo">
-            <Link className="Continuo-link " to="/Shop">
-              Continuo Shopping
-            </Link>
-          </Button>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="full-bage">
-        <Container className="w-100 total-container">
-          <Button onClick={totalFunc} className="total-price-btn">
-            Get Total Price
-          </Button>
-          <div className="total-div">
-            Total Price :{" "}
-            <Badge
-              className="total-price-badge"
-              bg="danger"
-            >{`${total} $`}</Badge>
+        <div className=" DoYouWant-cont">
+          <div className=" Continuo-container-empty container">
+            Do You Want TO
           </div>
-        </Container>
-        <div className="card-barent container ">
-          {sale.map((e) => (
-            <div key={e.id}>
-              <Card className="card-contaner">
-                <Card.Img className="shop-card-img" variant="top" src={e.img} />
-                <Card.Body className="shop-card-Body">
-                  <div className="shop-card-text-Container">
-                    <Card.Text className="SC-dollar">
-                      <Badge bg="danger" className="SC-dollar">
-                        ${e.price}
-                      </Badge>
-                    </Card.Text>
-                    <Card.Text className="SC-Name">{e.name}</Card.Text>
-                    <Card.Text className="SC-pusrches">
-                      No. of Items : {e.pusrches}
-                    </Card.Text>
-                    <Card.Text className="SC-count">
-                      Available : {e.count}
-                    </Card.Text>
-                  </div>
 
-                  <div className="btns-container">
-                    <button
-                      onClick={() => props.add(e)}
-                      className="plus-logo-container"
-                    >
-                      <BiPlusMedical className="plus-logo" />
-                    </button>
-                    <button
-                      onClick={() => props.dec(e)}
-                      className="plus-logo-container"
-                    >
-                      <FaMinus className="plus-logo" />
-                    </button>
-                    <button
-                      onClick={() => props.remove(e)}
-                      className="plus-logo-container"
-                    >
-                      <ImBoxRemove className="plus-logo" />
-                    </button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
-        </div>
-        <div>
-          <div className=" Continuo-container container">
+          <div>
             <Button variant="outline-success" className="Continuo">
               <Link className="Continuo-link " to="/Shop">
                 Continuo Shopping
@@ -118,6 +38,83 @@ const ShoppingCarD = (props) => {
             </Button>
           </div>
         </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="full-bagee">
+      <div className=" total-container">
+        <div className="total-div">
+          The Total Price Is :{" "}
+          <Badge className="total-price-badge" bg="danger">
+            ${props.total}{" "}
+          </Badge>
+        </div>
+
+        <div className=" Continuo-container ">
+          <Button variant="outline-success" className="Continuo">
+            <Link className="Continuo-link " to="/Shop">
+              Continuo Shopping
+            </Link>
+          </Button>
+        </div>
+      </div>
+        <div className="card-barent container ">
+        {sale.map((e) => (
+            <div key={e.id} className="shopingCard-cont">
+              <Card className="SC-card-container">
+                <Card.Img className="shop-card-img" variant="top" src={e.img} />
+
+                <div className="shoping-card-Body">
+                  <div className="SC-CB-1stLine">
+                    <Card.Text className="SC-Name2">{e.name}</Card.Text>
+                    <Card.Text className="SC-dollar2-cont">
+                      <Badge bg="danger" className="SC-dollar2">
+                        ${e.price}
+                      </Badge>
+                    </Card.Text>
+                  </div>
+
+                  <div>
+                    <Card.Text className="SC-count2">
+                      In Stock {e.count} more items
+                    </Card.Text>
+                  </div>
+
+                  <div className="btns-container2">
+                    <div className="ms-4">
+                      <Card.Text className="SC-pusrches">
+                        {e.pusrches} Items
+                      </Card.Text>
+                    </div>
+
+                    <div className="SH-btns-cont">
+                      <button
+                        onClick={() => props.add(e)}
+                        className="plus-logo-container"
+                      >
+                        <BiPlusMedical className="plus-logo" />
+                      </button>
+                      <button
+                        onClick={() => props.dec(e)}
+                        className="plus-logo-container"
+                      >
+                        <FaMinus className="minus-logo" />
+                      </button>
+                      <button
+                        onClick={() =>props.remove(e)}
+                        className="plus-logo-container"
+                      >
+                        <ImBoxRemove className="remove-logo" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          ))}
+        </div>
+
       </div>
     );
   }
